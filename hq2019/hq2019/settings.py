@@ -54,11 +54,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'oapi',
     'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -138,3 +140,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# 許可するオリジン
+CORS_ORIGIN_WHITELIST = [
+    '76f5777c.ngrok.io',
+]
+# レスポンスを公開する
+CORS_ALLOW_CREDENTIALS = True
