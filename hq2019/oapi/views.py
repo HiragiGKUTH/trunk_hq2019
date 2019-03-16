@@ -9,12 +9,12 @@ class ProductViewSet(viewsets.ViewSet):
     def list(self, request):
         queryset = Product.objects.all()
         serializer = ProductSerializer(queryset, many=True)
-        return  Response(serializer.data)
+        return  Response(serializer.data, headers={"Access-Control-Allow-Origin": "*"})
 
     def retrieve(self, request, pk):
         res = Product.objects.get(p_id=pk)
         serializer = ProductSerializer(res, many=False)
-        return Response(serializer.data)
+        return Response(serializer.data, headers={"Access-Control-Allow-Origin": "*"})
 
 class WishlistViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -22,7 +22,7 @@ class WishlistViewSet(viewsets.ViewSet):
         if line_userid == None:
             res = Wishlist.objects.all()
             slz = WishlistSerializer(res, many=True)
-            return Response(slz.data)
+            return Response(slz.data,  headers={"Access-Control-Allow-Origin": "*"})
 
         wishes_from_userid = Wishlist.objects.filter(l_id=line_userid).values()
         ids = [x["product_id"] for x in wishes_from_userid]
