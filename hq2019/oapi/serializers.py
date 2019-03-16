@@ -5,7 +5,7 @@ from oapi.models import Product, Wishlist
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("p_id", "name", "price")
+        fields = ("p_id", "name", "price", "img_url")
 
 class WishlistSerializer(serializers.ModelSerializer):
     class Meta:
