@@ -34,12 +34,12 @@ class WishlistViewSet(viewsets.ViewSet):
         line_userid = request.query_params.get("userid")
         product_id = request.query_params.get("pid")
         if line_userid == None or product_id == None:
-            return Response("403 Bad Request. Missing of query params", status=403)
+            return Response("400 . Missing of query params", status=403)
 
         try:
             p = Product.objects.get(p_id=str(product_id))
         except:
-            return Response("403 Bad Request. called product_id is not assigned", status=403)
+            return Response("400 . called product_id is not assigned", status=403)
 
         try: 
             Wishlist.objects.get(l_id=line_userid, product=p)
@@ -47,5 +47,14 @@ class WishlistViewSet(viewsets.ViewSet):
             w = Wishlist(l_id=line_userid, product=p)
             w.save()
             return Response("200 OK")
-        return Response("403 Bad Request. wishlist is already assigned", status=403)
+        return Response("400 . wishlist is already assigned", status=403)
             
+    def destroy(self, request, pk):
+        line_userid = request.query_params.get("userid")
+        product_id = request.query_params.get("pid")
+        if line_userid == None or product_id == None:
+            return Response("400 . invalid userid")
+        p = Product.objects.get(p_id=product_id)
+        w = Wishlist.objects.filter(l_id=line_userid, product=p, persisted=False)
+        w.delete();
+        return Response("200 OK")

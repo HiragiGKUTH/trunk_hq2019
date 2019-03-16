@@ -1,0 +1,1 @@
+web: gunicorn hq2019.wsgi --log-file -
