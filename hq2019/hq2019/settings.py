@@ -144,7 +144,12 @@ STATIC_URL = '/static/'
 
 # 許可するオリジン
 CORS_ORIGIN_WHITELIST = [
-    "*"
+    "https://76f5777c.ngrok.io/",
+    "https://76f5777c.ngrok.io",
+    "http://localhost:5000/",
+    "http://localhost:5000",
+    "http://localhost/",
+    "http://localhost",
 ]
 # レスポンスを公開する
 CORS_ALLOW_CREDENTIALS = True
