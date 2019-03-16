@@ -5,7 +5,7 @@ class Product(models.Model):
     p_id = models.CharField(max_length=64);
     name = models.CharField(max_length=1024);
     price = models.IntegerField();
-    img_url = models.CharField(max_length=1024)
+    img_url = models.CharField(max_length=1024, default="No Url")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self):
