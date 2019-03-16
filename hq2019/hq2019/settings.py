@@ -40,7 +40,7 @@ LOGGING = {
     },
 }
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["ss2019-hq.herokuapp.com"]
 
 
 # Application definition
