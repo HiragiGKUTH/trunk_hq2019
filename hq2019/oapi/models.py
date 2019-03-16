@@ -7,6 +7,8 @@ class Product(models.Model):
     price = models.IntegerField();
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.name
 
 class Popularity(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -15,5 +17,8 @@ class Popularity(models.Model):
 class Wishlist(models.Model):
     l_id = models.CharField(max_length=48);
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    persisted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.l_id
