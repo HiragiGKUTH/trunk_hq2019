@@ -52,8 +52,14 @@ class WishlistViewSet(viewsets.ViewSet):
     def destroy(self, request, pk):
         line_userid = request.query_params.get("userid")
         product_id = request.query_params.get("pid")
+        
+        if pk == "0" and line_userid != None:
+            w = Wishlist.objects.filter(l_id=line_userid)
+            w.delete()
+            return Response("200 OK")
+        
         if line_userid == None or product_id == None:
-            return Response("400 . invalid userid")
+            return Response("400 . invalid userid or pid")
         p = Product.objects.get(p_id=product_id)
         w = Wishlist.objects.filter(l_id=line_userid, product=p, persisted=False)
         w.delete();
