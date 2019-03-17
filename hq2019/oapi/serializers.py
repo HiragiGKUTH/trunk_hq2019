@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from oapi.models import Product, Wishlist
+from oapi.models import Product, Wishlist, Popularity
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -15,3 +15,8 @@ class WishlistSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print(validated_data)
         return validated_data
+
+class PopularitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Popularity
+        fields = "__all__"

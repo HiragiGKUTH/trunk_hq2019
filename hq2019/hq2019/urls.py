@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from oapi.views import ProductViewSet, WishlistViewSet
+from oapi.views import ProductViewSet, WishlistViewSet, PopularityViewSet
 
 router = routers.DefaultRouter()
-router.register("products", ProductViewSet, basename="product")
+router.register("product", ProductViewSet, basename="product")
 router.register("wishlist", WishlistViewSet, basename="wishlist")
+router.register("popularity", PopularityViewSet, basename="popularity")
 
 urlpatterns = [
     path('api/', include(router.urls)),

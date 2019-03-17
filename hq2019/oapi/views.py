@@ -1,8 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
-from oapi.models import Product, Wishlist
+from oapi.models import Product, Wishlist, Popularity
 
-from oapi.serializers import ProductSerializer, WishlistSerializer
+from oapi.serializers import ProductSerializer, WishlistSerializer, PopularitySerializer
 
 
 class ProductViewSet(viewsets.ViewSet):
@@ -31,22 +31,38 @@ class WishlistViewSet(viewsets.ViewSet):
         return Response(res.data);
 
     def create(self, request):
+        # set parameters
         line_userid = request.query_params.get("userid")
         product_id = request.query_params.get("pid")
+
+        # param check
         if line_userid == None or product_id == None:
             return Response("400 . Missing of query params", status=403)
 
+        # product existance test
         try:
             p = Product.objects.get(p_id=str(product_id))
         except:
             return Response("400 . called product_id is not assigned", status=403)
 
+        # save if wishlist is not assigned
         try: 
             Wishlist.objects.get(l_id=line_userid, product=p)
         except:
+            # persist
             w = Wishlist(l_id=line_userid, product=p)
             w.save()
+
+            # increase popularity
+            popularity = Popularity(product=p)
+            if popularity.exists():
+                popularity = Popularity.objects.get(product=p)
+            popularity.scan_count+=1
+            popularity.save()
+
             return Response("200 OK")
+
+        
         return Response("400 . wishlist is already assigned", status=403)
             
     def destroy(self, request, pk):
@@ -64,3 +80,9 @@ class WishlistViewSet(viewsets.ViewSet):
         w = Wishlist.objects.filter(l_id=line_userid, product=p, persisted=False)
         w.delete();
         return Response("200 OK")
+
+class PopularityViewSet(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Popularity.objects.all()
+        res = PopularitySerializer(queryset, many=True)
+        return Response(res.data)
