@@ -31,8 +31,8 @@ class WishlistViewSet(viewsets.ViewSet):
         return Response(res.data);
 
     def create(self, request):
-        line_userid = request.query_params.post("userid")
-        product_id = request.query_params.post("pid")
+        line_userid = request.query_params.get("userid")
+        product_id = request.query_params.get("pid")
         if line_userid == None or product_id == None:
             return Response("400 . Missing of query params", status=403)
 
