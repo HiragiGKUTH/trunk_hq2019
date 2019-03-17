@@ -12,10 +12,6 @@ class WishlistSerializer(serializers.ModelSerializer):
         model = Wishlist
         fields = "__all__"
 
-    def create(self, validated_data):
-        print(validated_data)
-        return validated_data
-
 class PopularitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Popularity

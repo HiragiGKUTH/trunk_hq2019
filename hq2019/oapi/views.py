@@ -1,31 +1,31 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
 from oapi.models import Product, Wishlist, Popularity
-
 from oapi.serializers import ProductSerializer, WishlistSerializer, PopularitySerializer
 
 
 class ProductViewSet(viewsets.ViewSet):
+    # GET
     def list(self, request):
         queryset = Product.objects.all()
-        serializer = ProductSerializer(queryset, many=True)
-        return  Response(serializer.data, headers={"Access-Control-Allow-Origin": "*"})
-
+        res = ProductSerializer(queryset, many=True)
+        return  Response(res.data, headers={"Access-Control-Allow-Origin": "*"})
+    # GET Detail
     def retrieve(self, request, pk):
-        res = Product.objects.get(p_id=pk)
-        serializer = ProductSerializer(res, many=False)
-        return Response(serializer.data, headers={"Access-Control-Allow-Origin": "*"})
+        queryset = Product.objects.get(p_id=pk)
+        res = ProductSerializer(queryset, many=False)
+        return Response(res.data, headers={"Access-Control-Allow-Origin": "*"})
 
 class WishlistViewSet(viewsets.ViewSet):
     def list(self, request):
         line_userid = request.query_params.get("userid")
         if line_userid == None:
-            res = Wishlist.objects.all()
-            slz = WishlistSerializer(res, many=True)
-            return Response(slz.data,  headers={"Access-Control-Allow-Origin": "*"})
+            queryset = Wishlist.objects.all()
+            res = WishlistSerializer(queryset, many=True)
+            return Response(res.data,  headers={"Access-Control-Allow-Origin": "*"})
 
-        wishes_from_userid = Wishlist.objects.filter(l_id=line_userid).values()
-        ids = [x["product_id"] for x in wishes_from_userid]
+        wishes = Wishlist.objects.filter(l_id=line_userid).values()
+        ids = [x["product_id"] for x in wishes]
         res = Product.objects.filter(p_id__in=ids)
         res = ProductSerializer(res, many=True)
         return Response(res.data);
@@ -55,9 +55,7 @@ class WishlistViewSet(viewsets.ViewSet):
 
             # increase popularity
             obj, created = Popularity.objects.get_or_create(product=p)
-            if created:
-                obj.scan_count = 1
-            else:
+            if not created:
                 obj.scan_count += 1
             obj.save()
             return Response("200 OK")
