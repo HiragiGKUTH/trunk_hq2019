@@ -13,7 +13,9 @@ class Product(models.Model):
 
 class Popularity(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    scan_count = models.IntegerField();
+    scan_count = models.IntegerField(default=1);
+    def __str__(self):
+        return "%d - %s" % (self.scan_count, self.product)
 
 class Wishlist(models.Model):
     l_id = models.CharField(max_length=48);

@@ -54,15 +54,13 @@ class WishlistViewSet(viewsets.ViewSet):
             w.save()
 
             # increase popularity
-            popularity = Popularity(product=p)
-            if popularity.exists():
-                popularity = Popularity.objects.get(product=p)
-            popularity.scan_count+=1
-            popularity.save()
-
+            obj, created = Popularity.objects.get_or_create(product=p)
+            if created:
+                obj.scan_count = 1
+            else:
+                obj.scan_count += 1
+            obj.save()
             return Response("200 OK")
-
-        
         return Response("400 . wishlist is already assigned", status=403)
             
     def destroy(self, request, pk):
